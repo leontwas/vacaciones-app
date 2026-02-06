@@ -57,44 +57,30 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (userData) => {
-        // Supabase requiere un email. Usaremos una convención legajo@licencias.app
-        const email = `${userData.legajo}@licencias.app`;
-
-        // 1. Registrar en Auth
+        // 1. Registrar en Auth con metadatos para el Trigger usando el email real
         const { data: authData, error: authError } = await supabase.auth.signUp({
-            email,
+            email: userData.email,
             password: userData.password,
+            options: {
+                data: {
+                    legajo: userData.legajo,
+                    nombre: userData.nombre,
+                    apellido: userData.apellido,
+                    jerarquia: userData.jerarquia,
+                    antiguedad_gral: parseInt(userData.antiguedadGral),
+                    antiguedad_grado: parseInt(userData.antiguedadGrado),
+                    dias_licencia_restantes: parseInt(userData.diasLicenciaRestantes)
+                }
+            }
         });
 
         if (authError) throw authError;
-
-        // 2. Insertar en tabla profiles
-        const { error: profileError } = await supabase
-            .from('profiles')
-            .insert([{
-                id: authData.user.id,
-                legajo: userData.legajo,
-                nombre: userData.nombre,
-                apellido: userData.apellido,
-                jerarquia: userData.jerarquia,
-                antiguedad_gral: parseInt(userData.antiguedadGral),
-                antiguedad_grado: parseInt(userData.antiguedadGrado),
-                dias_licencia_restantes: parseInt(userData.diasLicenciaRestantes)
-            }]);
-
-        if (profileError) {
-            // Si falla el perfil, intentamos borrar el usuario de auth para mantener integridad
-            // (Opcional, pero recomendado)
-            await supabase.auth.signOut();
-            throw profileError;
-        }
 
         await fetchUsers();
         return true;
     };
 
-    const login = async (legajo, password) => {
-        const email = `${legajo}@licencias.app`;
+    const login = async (email, password) => {
         const { error } = await supabase.auth.signInWithPassword({
             email,
             password

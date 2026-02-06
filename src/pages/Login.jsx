@@ -5,7 +5,7 @@ import { LogIn, User, Lock } from 'lucide-react';
 
 const Login = () => {
     const [formData, setFormData] = useState({
-        legajo: '',
+        email: '',
         password: ''
     });
     const [error, setError] = useState('');
@@ -23,7 +23,7 @@ const Login = () => {
         setLoading(true);
 
         try {
-            await login(formData.legajo, formData.password);
+            await login(formData.email, formData.password);
             navigate('/calendario');
         } catch (err) {
             setError(err.message);
@@ -48,13 +48,13 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="form-label d-flex align-items-center">
-                            <User size={18} className="me-2" /> Legajo
+                            <User size={18} className="me-2" /> Email
                         </label>
                         <input
-                            type="text"
-                            name="legajo"
+                            type="email"
+                            name="email"
                             className="form-control p-2"
-                            placeholder="Ingrese su legajo"
+                            placeholder="Ingrese su email"
                             required
                             onChange={handleChange}
                         />

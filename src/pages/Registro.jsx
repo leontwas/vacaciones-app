@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { UserPlus, Shield, User, Calendar, Lock } from 'lucide-react';
+import { UserPlus, Shield, User, Calendar, Lock, Eye, EyeOff, Mail } from 'lucide-react';
 
 const Registro = () => {
     const [formData, setFormData] = useState({
         jerarquia: '',
         legajo: '',
         nombre: '',
+        apellido: '',
+        email: '',
         antiguedadGral: '',
         antiguedadGrado: '',
         diasLicenciaRestantes: 0,
         password: '',
-        confirmPassword: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { register } = useAuth();
@@ -30,15 +32,10 @@ const Registro = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
-        if (formData.password !== formData.confirmPassword) {
-            return setError('Las contraseñas no coinciden');
-        }
-
         setLoading(true);
+
         try {
-            const { confirmPassword, ...dataToSave } = formData;
-            await register(dataToSave);
+            await register(formData);
             alert('Usuario registrado con éxito');
             navigate('/login');
         } catch (err) {
@@ -49,7 +46,7 @@ const Registro = () => {
     };
 
     return (
-        <div className="auth-container d-flex align-items-center justify-content-center min-vh-100 bg-light">
+        <div className="auth-container d-flex align-items-center justify-content-center min-vh-100 bg-light py-5">
             <div className="card shadow-lg p-4" style={{ maxWidth: '500px', width: '100%', borderRadius: '15px' }}>
                 <div className="text-center mb-4">
                     <UserPlus size={48} className="text-primary mb-2" />
@@ -166,35 +163,43 @@ const Registro = () => {
                                 value={formData.diasLicenciaRestantes}
                                 onChange={handleChange}
                             />
-                            <div className="small text-muted mt-1">
-                                Ingrese la cantidad de días de licencia anual que tiene pendientes de uso.
-                            </div>
                         </div>
 
-                        <div className="col-md-6">
+                        <div className="col-md-12">
+                            <label className="form-label d-flex align-items-center">
+                                <Mail size={18} className="me-2" /> Email
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                className="form-control"
+                                placeholder="ejemplo@correo.com"
+                                required
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="col-md-12">
                             <label className="form-label d-flex align-items-center">
                                 <Lock size={18} className="me-2" /> Contraseña
                             </label>
-                            <input
-                                type="password"
-                                name="password"
-                                className="form-control"
-                                required
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="col-md-6">
-                            <label className="form-label d-flex align-items-center">
-                                <Lock size={18} className="me-2" /> Confirmar
-                            </label>
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                className="form-control"
-                                required
-                                onChange={handleChange}
-                            />
+                            <div className="input-group">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    className="form-control"
+                                    placeholder="Mínimo 6 caracteres"
+                                    required
+                                    onChange={handleChange}
+                                />
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
                         </div>
                     </div>
 
