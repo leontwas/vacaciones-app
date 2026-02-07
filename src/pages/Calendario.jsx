@@ -923,7 +923,7 @@ const Calendario = () => {
                     className={bottomMenu === 'preestablecidos' ? 'active' : ''}
                     onClick={() => setBottomMenu(bottomMenu === 'preestablecidos' ? null : 'preestablecidos')}
                 >
-                    PREESTABLECIDOS
+                    TERCIOS Y LIBRETA VII
                 </button>
                 <button
                     className={bottomMenu === 'turnos' ? 'active' : ''}
@@ -1006,7 +1006,7 @@ const Calendario = () => {
             {bottomMenu === 'preestablecidos' && (
                 <div className="preestablecidos-panel">
                     <div className="preestablecidos-header">
-                        <h3>ESQUEMAS PREESTABLECIDOS</h3>
+                        <h3>TERCIOS Y LIBRETA VII</h3>
                         <button className="clear-calendar-btn" onClick={clearAllCalendar}>
                             🗑️ Limpiar Calendario
                         </button>

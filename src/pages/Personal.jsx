@@ -1,6 +1,7 @@
 import { useAuth } from '../context/AuthContext';
-import { Users, Search, ArrowUpDown, Calendar, Trash2 } from 'lucide-react';
+import { Users, Search, ArrowUpDown, Calendar, Trash2, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Personal = () => {
     const { users, deleteUser } = useAuth();
@@ -55,8 +56,11 @@ const Personal = () => {
             <div className="card shadow-sm border-0 p-4" style={{ borderRadius: '15px' }}>
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
                     <div className="d-flex align-items-center gap-2">
-                        <Users className="text-primary" size={32} />
-                        <h2 className="m-0 fw-bold">Listado de Personal</h2>
+                        <Link to="/calendario" className="btn btn-outline-secondary btn-sm rounded-circle p-1 me-2" title="Volver al Calendario">
+                            <ArrowLeft size={20} />
+                        </Link>
+                        <Users className="text-primary d-none d-sm-block" size={32} />
+                        <h2 className="m-0 fw-bold fs-4 fs-md-2">Personal</h2>
                     </div>
 
                     <div className="position-relative" style={{ maxWidth: '400px', width: '100%' }}>
